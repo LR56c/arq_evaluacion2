@@ -1,0 +1,170 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id            String     @id @db.Uuid
+  name          String
+  email         String
+  emailVerified Boolean
+  image         String?
+  createdAt     DateTime
+  updatedAt     DateTime
+  sessions      Session[]
+  accounts      Account[]
+  Seller        Seller[]
+  Order         Order[]
+  Address       Address[]
+  Customer      Customer[]
+
+  @@unique([email])
+}
+
+model Session {
+  id        String   @id @db.Uuid
+  expiresAt DateTime
+  token     String
+  createdAt DateTime
+  updatedAt DateTime
+  ipAddress String?
+  userAgent String?
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+}
+
+model Account {
+  id                    String    @id @db.Uuid
+  accountId             String    @db.Uuid
+  providerId            String    @db.Uuid
+  userId                String    @db.Uuid
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime
+  updatedAt             DateTime
+}
+
+model Verification {
+  id         String    @id @db.Uuid
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime?
+  updatedAt  DateTime?
+}
+
+enum Role {
+  ADMIN
+  SELLER
+  CUSTOMER
+}
+
+model Customer {
+  id           String  @id @db.Uuid
+  user         User    @relation(fields: [userId], references: [id])
+  userId       String  @unique @db.Uuid
+  isSubscribed Boolean @default(false)
+  phoneNumber  String?
+}
+
+model Seller {
+  id          String    @id @db.Uuid
+  user        User      @relation(fields: [userId], references: [id])
+  userId      String    @unique @db.Uuid
+  companyName String?
+  products    Product[]
+}
+
+model Product {
+  id          String      @id @db.Uuid
+  name        String
+  description String
+  price       Float
+  stock       Int         @default(0)
+  imageUrl    String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  seller      Seller?     @relation(fields: [sellerId], references: [id])
+  sellerId    String?     @db.Uuid
+  orderItems  OrderItem[]
+  promotions  Promotion[]
+}
+
+model Promotion {
+  id          String    @id @db.Uuid
+  name        String
+  description String?
+  discount    Float
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  products    Product[]
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+model Order {
+  id         String      @id @db.Uuid
+  userId     String      @db.Uuid
+  customer   User        @relation(fields: [userId], references: [id])
+  total      Float
+  status     OrderStatus @default(PENDING)
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  orderItems OrderItem[]
+  shipment   Shipment?
+}
+
+model OrderItem {
+  id              String  @id @db.Uuid
+  orderId         String  @db.Uuid
+  order           Order   @relation(fields: [orderId], references: [id])
+  productId       String  @db.Uuid
+  product         Product @relation(fields: [productId], references: [id])
+  quantity        Int
+  priceAtPurchase Float
+}
+
+model Shipment {
+  id               String    @id @db.Uuid
+  orderId          String    @unique @db.Uuid
+  order            Order     @relation(fields: [orderId], references: [id])
+  trackingNumber   String    @unique
+  pickupDateTime   DateTime?
+  shippingDateTime DateTime?
+  deliveryDateTime DateTime?
+  address          Address   @relation(fields: [addressId], references: [id])
+  addressId        String    @db.Uuid
+}
+
+model Address {
+  id         String     @id @db.Uuid
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String
+  userId     String     @db.Uuid
+  user       User       @relation(fields: [userId], references: [id])
+  isDefault  Boolean    @default(false)
+  shipments  Shipment[]
+}
