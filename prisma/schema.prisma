@@ -22,6 +22,7 @@ model User {
   Order         Order[]
   Address       Address[]
   Customer      Customer[]
+  roles         UserRole[]
 
   @@unique([email])
 }
@@ -66,10 +67,19 @@ model Verification {
   updatedAt  DateTime?
 }
 
-enum Role {
-  ADMIN
-  SELLER
-  CUSTOMER
+model Role {
+  id    String     @id @db.Uuid
+  name  String     @unique
+  users UserRole[]
+}
+
+model UserRole {
+  userId String @db.Uuid
+  user   User   @relation(fields: [userId], references: [id])
+  roleId String @db.Uuid
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
 }
 
 model Customer {
@@ -100,7 +110,8 @@ model Product {
   seller      Seller?     @relation(fields: [sellerId], references: [id])
   sellerId    String?     @db.Uuid
   orderItems  OrderItem[]
-  promotions  Promotion[]
+  promotionId String?     @db.Uuid
+  promotion   Promotion?  @relation(fields: [promotionId], references: [id])
 }
 
 model Promotion {
