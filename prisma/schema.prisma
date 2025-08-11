@@ -68,9 +68,11 @@ model Verification {
 }
 
 model Role {
-  id    String     @id @db.Uuid
-  name  String     @unique
-  users UserRole[]
+  id        String     @id @db.Uuid
+  name      String     @unique
+  createdAt DateTime
+  updatedAt DateTime?
+  users     UserRole[]
 }
 
 model UserRole {
