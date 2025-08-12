@@ -9,7 +9,7 @@ datasource db {
 }
 
 model User {
-  id            String     @id @db.Uuid
+  id            String     @id
   name          String
   email         String
   emailVerified Boolean
@@ -25,27 +25,29 @@ model User {
   roles         UserRole[]
 
   @@unique([email])
+  @@map("user")
 }
 
 model Session {
-  id        String   @id @db.Uuid
+  id        String   @id
   expiresAt DateTime
   token     String
   createdAt DateTime
   updatedAt DateTime
   ipAddress String?
   userAgent String?
-  userId    String   @db.Uuid
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([token])
+  @@map("session")
 }
 
 model Account {
-  id                    String    @id @db.Uuid
-  accountId             String    @db.Uuid
-  providerId            String    @db.Uuid
-  userId                String    @db.Uuid
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
   user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
@@ -56,19 +58,23 @@ model Account {
   password              String?
   createdAt             DateTime
   updatedAt             DateTime
+
+  @@map("account")
 }
 
 model Verification {
-  id         String    @id @db.Uuid
+  id         String    @id
   identifier String
   value      String
   expiresAt  DateTime
   createdAt  DateTime?
   updatedAt  DateTime?
+
+  @@map("verification")
 }
 
 model Role {
-  id        String     @id @db.Uuid
+  id        String     @id
   name      String     @unique
   createdAt DateTime
   updatedAt DateTime?
@@ -76,32 +82,32 @@ model Role {
 }
 
 model UserRole {
-  userId String @db.Uuid
+  userId String
   user   User   @relation(fields: [userId], references: [id])
-  roleId String @db.Uuid
+  roleId String
   role   Role   @relation(fields: [roleId], references: [id])
 
   @@id([userId, roleId])
 }
 
 model Customer {
-  id           String  @id @db.Uuid
+  id           String  @id
   user         User    @relation(fields: [userId], references: [id])
-  userId       String  @unique @db.Uuid
+  userId       String  @unique
   isSubscribed Boolean @default(false)
   phoneNumber  String?
 }
 
 model Seller {
-  id          String    @id @db.Uuid
+  id          String    @id
   user        User      @relation(fields: [userId], references: [id])
-  userId      String    @unique @db.Uuid
+  userId      String    @unique
   companyName String?
   products    Product[]
 }
 
 model Product {
-  id          String      @id @db.Uuid
+  id          String      @id
   name        String
   description String
   price       Float
@@ -110,14 +116,14 @@ model Product {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
   seller      Seller?     @relation(fields: [sellerId], references: [id])
-  sellerId    String?     @db.Uuid
+  sellerId    String?
   orderItems  OrderItem[]
-  promotionId String?     @db.Uuid
+  promotionId String?
   promotion   Promotion?  @relation(fields: [promotionId], references: [id])
 }
 
 model Promotion {
-  id          String    @id @db.Uuid
+  id          String    @id
   name        String
   description String?
   discount    Float
@@ -136,8 +142,8 @@ enum OrderStatus {
 }
 
 model Order {
-  id         String      @id @db.Uuid
-  userId     String      @db.Uuid
+  id         String      @id
+  userId     String
   customer   User        @relation(fields: [userId], references: [id])
   total      Float
   status     OrderStatus @default(PENDING)
@@ -148,35 +154,35 @@ model Order {
 }
 
 model OrderItem {
-  id              String  @id @db.Uuid
-  orderId         String  @db.Uuid
+  id              String  @id
+  orderId         String
   order           Order   @relation(fields: [orderId], references: [id])
-  productId       String  @db.Uuid
+  productId       String
   product         Product @relation(fields: [productId], references: [id])
   quantity        Int
   priceAtPurchase Float
 }
 
 model Shipment {
-  id               String    @id @db.Uuid
-  orderId          String    @unique @db.Uuid
+  id               String    @id
+  orderId          String    @unique
   order            Order     @relation(fields: [orderId], references: [id])
   trackingNumber   String    @unique
   pickupDateTime   DateTime?
   shippingDateTime DateTime?
   deliveryDateTime DateTime?
   address          Address   @relation(fields: [addressId], references: [id])
-  addressId        String    @db.Uuid
+  addressId        String
 }
 
 model Address {
-  id         String     @id @db.Uuid
+  id         String     @id
   street     String
   city       String
   state      String
   postalCode String
   country    String
-  userId     String     @db.Uuid
+  userId     String
   user       User       @relation(fields: [userId], references: [id])
   isDefault  Boolean    @default(false)
   shipments  Shipment[]
