@@ -18,11 +18,12 @@ model User {
   updatedAt     DateTime
   sessions      Session[]
   accounts      Account[]
-  Seller        Seller[]
   Order         Order[]
   Address       Address[]
-  Customer      Customer[]
   roles         UserRole[]
+
+  metadata String
+  Product  Product[]
 
   @@unique([email])
   @@map("user")
@@ -90,48 +91,70 @@ model UserRole {
   @@id([userId, roleId])
 }
 
-model Customer {
-  id           String  @id
-  user         User    @relation(fields: [userId], references: [id])
-  userId       String  @unique
-  isSubscribed Boolean @default(false)
-  phoneNumber  String?
-}
-
-model Seller {
-  id          String    @id
-  user        User      @relation(fields: [userId], references: [id])
-  userId      String    @unique
-  companyName String?
-  products    Product[]
-}
+// model Customer {
+//   id           String  @id
+//   user         User    @relation(fields: [userId], references: [id])
+//   userId       String  @unique
+//   isSubscribed Boolean @default(false)
+//   phoneNumber  String?
+// }
+//
+// model Seller {
+//   id          String    @id
+//   user        User      @relation(fields: [userId], references: [id])
+//   userId      String    @unique
+//   companyName String?
+//   products    Product[]
+// }
 
 model Product {
-  id          String      @id
+  id          String             @id @default(uuid()) @db.Uuid
   name        String
   description String
   price       Float
-  stock       Int         @default(0)
+  stock       Int                @default(0)
   imageUrl    String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
-  seller      Seller?     @relation(fields: [sellerId], references: [id])
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  sale        Sale?
+  promotions  PromotionProduct[]
   sellerId    String?
+  seller      User?              @relation(fields: [sellerId], references: [id])
   orderItems  OrderItem[]
-  promotionId String?
-  promotion   Promotion?  @relation(fields: [promotionId], references: [id])
+}
+
+model Sale {
+  id         String   @id @default(uuid()) @db.Uuid
+  percentage Float
+  startDate  DateTime
+  endDate    DateTime
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  productId String  @unique @db.Uuid
+  product   Product @relation(fields: [productId], references: [id])
 }
 
 model Promotion {
-  id          String    @id
+  id          String             @id @default(uuid()) @db.Uuid
   name        String
   description String?
-  discount    Float
+  percentage  Float
   startDate   DateTime
   endDate     DateTime
-  isActive    Boolean   @default(true)
-  createdAt   DateTime  @default(now())
-  products    Product[]
+  isActive    Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  products    PromotionProduct[]
+}
+
+model PromotionProduct {
+  promotionId String    @db.Uuid
+  promotion   Promotion @relation(fields: [promotionId], references: [id])
+  productId   String    @db.Uuid
+  product     Product   @relation(fields: [productId], references: [id])
+  quantity    Int
+
+  @@id([promotionId, productId])
 }
 
 enum OrderStatus {
@@ -142,7 +165,7 @@ enum OrderStatus {
 }
 
 model Order {
-  id         String      @id
+  id         String      @id @db.Uuid
   userId     String
   customer   User        @relation(fields: [userId], references: [id])
   total      Float
@@ -154,10 +177,10 @@ model Order {
 }
 
 model OrderItem {
-  id              String  @id
-  orderId         String
+  id              String  @id @db.Uuid
+  orderId         String  @db.Uuid
   order           Order   @relation(fields: [orderId], references: [id])
-  productId       String
+  productId       String  @db.Uuid
   product         Product @relation(fields: [productId], references: [id])
   quantity        Int
   priceAtPurchase Float
@@ -165,18 +188,18 @@ model OrderItem {
 
 model Shipment {
   id               String    @id
-  orderId          String    @unique
+  orderId          String    @unique @db.Uuid
   order            Order     @relation(fields: [orderId], references: [id])
   trackingNumber   String    @unique
   pickupDateTime   DateTime?
   shippingDateTime DateTime?
   deliveryDateTime DateTime?
   address          Address   @relation(fields: [addressId], references: [id])
-  addressId        String
+  addressId        String    @db.Uuid
 }
 
 model Address {
-  id         String     @id
+  id         String     @id @db.Uuid
   street     String
   city       String
   state      String
