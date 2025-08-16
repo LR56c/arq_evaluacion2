@@ -10,7 +10,7 @@ export class InvalidJSONException extends DomainException {
 }
 
 
-const jsonSchema = z.lazy(() => {
+export const jsonSchema = z.lazy(() => {
   return z.union([
     z.string(),
     z.number(),
@@ -25,6 +25,10 @@ export class ValidJSON {
 
   private constructor( value: Record<string, any> ) {
     this.value = value
+  }
+
+  toString(): string {
+    return JSON.stringify( this.value )
   }
 
   /**

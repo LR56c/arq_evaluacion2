@@ -1,20 +1,20 @@
 import { type Either, isLeft, left } from "fp-ts/Either"
-import { CountryDAO }                from "../domain/country_dao"
+import { AddressDAO }                from "../domain/address_dao"
 import {
   BaseException
 }                                    from "../../shared/domain/exceptions/base_exception"
-import { Country }                   from "../domain/country"
+import { Address }                   from "../domain/address"
 import {
   genericEnsureSearch
 }                                    from "../../shared/utils/generic_ensure_search"
 
-export class SearchCountry {
-  constructor( private readonly dao: CountryDAO ) {
+export class SearchAddress {
+  constructor( private readonly dao: AddressDAO ) {
   }
 
   async execute( query: Record<string, any>, limit ?: number,
     skip ?: string, sortBy ?: string,
-    sortType ?: string ): Promise<Either<BaseException[], Country[]>> {
+    sortType ?: string ): Promise<Either<BaseException[], Address[]>> {
     const searchParamsResult = genericEnsureSearch( limit, skip, sortBy,
       sortType )
 

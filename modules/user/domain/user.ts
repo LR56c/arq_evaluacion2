@@ -5,12 +5,16 @@ import { ValidDate }                 from "../../shared/domain/value_objects/val
 import { wrapType, wrapTypeDefault } from "../../shared/utils/wrap_type"
 import { Errors }                    from "../../shared/domain/exceptions/errors"
 import { BaseException } from "../../shared/domain/exceptions/base_exception"
+import { Role } from "../../role/domain/role"
+import { ValidJSON } from "../../shared/domain/json_schema"
 
 export class User {
   private constructor(
     readonly id: UUID,
     readonly name: ValidString,
     readonly email: Email,
+    readonly metadata: ValidJSON,
+    readonly roles: Role[],
     readonly createdAt: ValidDate,
     readonly updatedAt?: ValidDate
   ) {
@@ -19,15 +23,19 @@ export class User {
   static create(
     id: string,
     name: string,
-    email: string
+    email: string,
+    metadata: Record<string, any>,
+    roles: Role[],
   ): User {
-    return User.fromPrimitives( id, name, email, ValidDate.nowUTC(), null ) as User
+    return User.fromPrimitives( id, name, email, metadata, roles, ValidDate.nowUTC(), null ) as User
   }
 
   static fromPrimitivesThrow(
     id: string,
     name: string,
     email: string,
+    metadata: Record<string, any>,
+    roles: Role[],
     createdAt: Date | string,
     updatedAt: Date | string | null
   ): User {
@@ -35,6 +43,8 @@ export class User {
       UUID.from( id ),
       ValidString.from( name ),
       Email.from( email ),
+      ValidJSON.from( metadata ),
+      roles,
       ValidDate.from( createdAt ),
       updatedAt ? ValidDate.from( updatedAt ) : undefined
     )
@@ -44,6 +54,8 @@ export class User {
     id: string,
     name: string,
     email: string,
+    metadata: Record<string, any>,
+    roles: Role[],
     createdAt: Date | string,
     updatedAt: Date | string | null
   ): User | Errors {
@@ -78,6 +90,12 @@ export class User {
       errors.push( _updatedAt )
     }
 
+    const _metadata = wrapType( () => ValidJSON.from( metadata ) )
+
+    if ( _metadata instanceof BaseException ) {
+      errors.push( _metadata )
+    }
+
     if ( errors.length > 0 ) {
       return  new Errors( errors )
     }
@@ -86,6 +104,8 @@ export class User {
       _id as UUID,
       _name as ValidString,
       _email as Email,
+      _metadata as ValidJSON,
+      roles,
       _createdAt as ValidDate,
       _updatedAt as ValidDate | undefined
     )

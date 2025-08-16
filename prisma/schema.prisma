@@ -199,23 +199,29 @@ model Shipment {
 }
 
 model Address {
-  id         String     @id @db.Uuid
+  id         String   @id @db.Uuid
   street     String
   city       String
   state      String
   postalCode String
-  country    String
-  userId     String
-  user       User       @relation(fields: [userId], references: [id])
-  isDefault  Boolean    @default(false)
-  shipments  Shipment[]
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  countryId String
+  country   Country @relation(fields: [countryId], references: [id])
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  shipments Shipment[]
 }
 
 model Country {
-  id        BigInt   @id
-  name      String   @unique
-  code      String   @unique
-  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  id        String    @id
+  name      String    @unique
+  code      String    @unique
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  Address   Address[]
 
   @@map("country")
 }

@@ -5,16 +5,18 @@ import { Country }       from "../../country/domain/country"
 import { Errors }        from "../../shared/domain/exceptions/errors"
 import { BaseException } from "../../shared/domain/exceptions/base_exception"
 import { wrapType }      from "../../shared/utils/wrap_type"
+import { ValidDate }     from "../../shared/domain/value_objects/valid_date"
 
 export class Address {
   private constructor(
-    private readonly id: UUID,
-    private readonly street: ValidString,
-    private readonly city: ValidString,
-    private readonly state: ValidString,
-    private readonly postalCode: ValidString,
-    private readonly country: Country,
-    private readonly isDefault: ValidBool
+    readonly id: UUID,
+    readonly street: ValidString,
+    readonly city: ValidString,
+    readonly state: ValidString,
+    readonly postalCode: ValidString,
+    readonly country: Country,
+    readonly isDefault: ValidBool,
+    readonly createdAt: ValidDate
   )
   {
   }
@@ -29,7 +31,7 @@ export class Address {
     isDefault: boolean
   ): Address | Errors {
     return Address.fromPrimitives(
-      id, street, city, state, postalCode, country, isDefault
+      id, street, city, state, postalCode, country, isDefault, new Date()
     )
   }
 
@@ -40,7 +42,8 @@ export class Address {
     state: string,
     postalCode: string,
     country: Country,
-    isDefault: boolean
+    isDefault: boolean,
+    createdAt: Date | string
   ): Address {
     return new Address(
       UUID.from( id ),
@@ -49,7 +52,8 @@ export class Address {
       ValidString.from( state ),
       ValidString.from( postalCode ),
       country,
-      ValidBool.from( isDefault )
+      ValidBool.from( isDefault ),
+      ValidDate.from( createdAt )
     )
   }
 
@@ -60,7 +64,8 @@ export class Address {
     state: string,
     postalCode: string,
     country: Country,
-    isDefault: boolean
+    isDefault: boolean,
+    createdAt: Date | string
   ): Address | Errors {
     const errors = []
 
@@ -101,6 +106,12 @@ export class Address {
       errors.push( _isDefault )
     }
 
+    const _createdAt = wrapType( () => ValidDate.from( createdAt ) )
+
+    if ( _createdAt instanceof BaseException ) {
+      errors.push( _createdAt )
+    }
+
     if ( errors.length > 0 ) {
       return new Errors( errors )
     }
@@ -112,7 +123,8 @@ export class Address {
       _state as ValidString,
       _postalCode as ValidString,
       country,
-      _isDefault as ValidBool
+      _isDefault as ValidBool,
+      _createdAt as ValidDate
     )
   }
 }
