@@ -1,7 +1,5 @@
-import { AddressDAO } from "../../address/domain/address_dao"
 import { Either, isLeft, left, right } from "fp-ts/Either"
 import { BaseException } from "../../shared/domain/exceptions/base_exception"
-import { Address } from "../../address/domain/address"
 import { wrapType } from "../../shared/utils/wrap_type"
 import { UUID } from "../../shared/domain/value_objects/uuid"
 import {
@@ -10,27 +8,27 @@ import {
 import {
   DataNotFoundException
 } from "../../shared/domain/exceptions/data_not_found_exception"
-import { SaleDAO }                     from "../domain/sale_dao"
-import { Sale } from "../domain/sale"
+import { PromotionDAO }                from "../domain/promotion_dao"
+import { Promotion }                   from "../domain/promotion"
 
-export const ensureSaleExist = async ( dao : SaleDAO, id: string): Promise<Either<BaseException[], Sale>> => {
+export const ensurePromotionExist = async ( dao : PromotionDAO, id: string): Promise<Either<BaseException[], Promotion>> => {
   const _id = wrapType(()=>UUID.from(id))
 
   if (_id instanceof BaseException) {
     return left( [_id] )
   }
 
-  const sale = await dao.search(
+  const address = await dao.search(
     { id: _id.toString() }, ValidInteger.from(1))
 
-  if (isLeft(sale)) {
-    return left(sale.left)
+  if (isLeft(address)) {
+    return left(address.left)
   }
 
-  if(sale.right.items[0].id.toString() !== id) {
+  if(address.right[0].id.toString() !== id) {
     return left( [new DataNotFoundException()] )
   }
 
 
-  return right( sale.right.items[0] )
+  return right( address.right[0] )
 }

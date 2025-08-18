@@ -116,7 +116,7 @@ export class PrismaProductData implements ProductDAO {
             sale  : true
           }
         } ),
-        this.db.user.count( {
+        this.db.product.count( {
           where: where
         } )
       ] )

@@ -19,6 +19,7 @@ import * as changeCase         from "change-case"
 import { Address }             from "../../address/domain/address"
 import { Country }             from "../../country/domain/country"
 import { Errors }              from "../../shared/domain/exceptions/errors"
+import { PaginatedResult }     from "../../shared/domain/paginated_result"
 
 export class PrismaSaleData implements SaleDAO {
   constructor( private readonly db: PrismaClient ) {
@@ -62,7 +63,7 @@ export class PrismaSaleData implements SaleDAO {
   async search( query: Record<string, any>, limit?: ValidInteger,
     skip?: ValidString,
     sortBy?: ValidString,
-    sortType?: ValidString ): Promise<Either<BaseException[], Sale[]>> {
+    sortType?: ValidString ): Promise<Either<BaseException[], PaginatedResult<Sale>>> {
     try {
       const where = {}
       if ( query.id ) {
@@ -100,13 +101,19 @@ export class PrismaSaleData implements SaleDAO {
         // @ts-ignore
         orderBy[key] = sortType ? sortType.value : "desc"
       }
-      const offset   = skip ? parseInt( skip.value ) : 0
-      const response = await this.db.sale.findMany( {
-        where  : where,
-        orderBy: orderBy,
-        skip   : offset,
-        take   : limit?.value,
-      } )
+      const offset  = skip ? parseInt( skip.value ) : 0
+      const results = await this.db.$transaction( [
+        this.db.sale.findMany( {
+          where  : where,
+          orderBy: orderBy,
+          skip   : offset,
+          take   : limit?.value
+        } ),
+        this.db.sale.count( {
+          where: where
+        } )
+      ] )
+      const [response, total] = results
 
       const result: Sale[] = []
       for ( const e of response ) {
@@ -125,7 +132,10 @@ export class PrismaSaleData implements SaleDAO {
         }
         result.push( mapped )
       }
-      return right( result )
+      return right( {
+        items: result,
+        total: total
+      } )
     }
     catch ( e ) {
       return left( [new InfrastructureException()] )
