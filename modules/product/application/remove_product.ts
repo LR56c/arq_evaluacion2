@@ -1,17 +1,17 @@
-import { AddressDAO }                  from "../domain/address_dao"
 import { Either, isLeft, left, right } from "fp-ts/Either"
 import {
   BaseException
 }                                      from "../../shared/domain/exceptions/base_exception"
-import { ensureAddressExist }          from "../utils/ensure_address_exist"
+import { ProductDAO }                  from "../domain/product_dao"
+import { ensureProductExist }          from "../utils/ensure_product_exist"
 
-export class RemoveAddress {
-  constructor( private readonly dao: AddressDAO ) {
+export class RemoveProduct {
+  constructor( private readonly dao: ProductDAO ) {
   }
 
   async execute( id: string ): Promise<Either<BaseException[], boolean>> {
 
-    const exist = await ensureAddressExist( this.dao, id )
+    const exist = await ensureProductExist( this.dao, id )
 
     if ( isLeft( exist ) ) {
       return left( exist.left )

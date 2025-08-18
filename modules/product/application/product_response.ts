@@ -1,34 +1,14 @@
-import { Discount } from '../../../discount_type/domain/discount'
-import { ValidRank } from '../../../shared/domain/value_objects/valid_rank'
-import { UUID } from '../../../shared/domain/value_objects/uuid'
-import { ValidDate } from '../../../shared/domain/value_objects/valid_date'
-import { ValidInteger } from '../../../shared/domain/value_objects/valid_integer'
-import { ValidString } from '../../../shared/domain/value_objects/valid_string'
-import { ValidURL } from '../../../shared/domain/value_objects/valid_url'
+import { z }          from "zod"
+import { saleSchema } from "../../sales/application/sale_dto"
 
-export class ProductResponse {
-	constructor(
-		readonly id: UUID,
-		readonly code: ValidString,
-		readonly product_code: ValidString,
-		readonly name: ValidString,
-		readonly description: ValidString,
-		readonly created_at: ValidDate,
-		readonly brand: ValidString,
-		readonly price: ValidInteger,
-		readonly image_url: ValidURL,
-		readonly stock: ValidInteger,
-		readonly average_rank: ValidRank,
-		readonly category: ProductCategory,
-		readonly discount?: Discount
-	)
-	{}
-}
+export const productResponseSchema = z.object( {
+  id         : z.uuid(),
+  name       : z.string(),
+  description: z.string(),
+  price      : z.number(),
+  stock      : z.number(),
+  image_url  : z.string(),
+  sale       : saleSchema,
+} )
 
-
-export class ProductCategory {
-	constructor(
-		readonly name: ValidString
-	)
-	{}
-}
+export type ProductResponse = z.infer<typeof productResponseSchema>

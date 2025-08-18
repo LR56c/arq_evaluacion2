@@ -1,0 +1,33 @@
+import { Either, isLeft, left } from "fp-ts/Either"
+import {
+  BaseException
+}                               from "../../shared/domain/exceptions/base_exception"
+import { genericEnsureSearch } from "../../shared/utils/generic_ensure_search"
+import { SaleDAO }              from "../domain/sale_dao"
+import { Sale }                 from "../domain/sale"
+
+export class SearchSale {
+  constructor( private readonly dao: SaleDAO ) {
+  }
+
+  async execute( query: Record<string, any>, limit ?: number,
+    skip ?: string, sortBy ?: string,
+    sortType ?: string ): Promise<Either<BaseException[], Sale[]>> {
+    const searchParamsResult = genericEnsureSearch( limit, skip, sortBy,
+      sortType )
+
+    if ( isLeft( searchParamsResult ) ) {
+      return left( searchParamsResult.left )
+    }
+
+    const {
+            validLimit,
+            validSkip,
+            validSortBy,
+            validSortType
+          } = searchParamsResult.right
+
+    return this.dao.search( query, validLimit, validSkip, validSortBy,
+      validSortType )
+  }
+}

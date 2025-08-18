@@ -31,7 +31,7 @@ export class AddAddress {
   {
   }
 
-  async add( userId: string,
+  async execute( userId: string,
     address: AddressDTO ): Promise<Either<BaseException[], boolean>> {
 
     const userResult = await this.searchUser.execute(

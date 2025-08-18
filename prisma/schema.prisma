@@ -116,20 +116,22 @@ model Product {
   imageUrl    String?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+  saleId      String?
   sale        Sale?
   promotions  PromotionProduct[]
-  sellerId    String?
-  seller      User?              @relation(fields: [sellerId], references: [id])
+  sellerId    String
+  seller      User               @relation(fields: [sellerId], references: [id])
   orderItems  OrderItem[]
 }
 
 model Sale {
-  id         String   @id @default(uuid()) @db.Uuid
-  percentage Float
-  startDate  DateTime
-  endDate    DateTime
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
+  id          String   @id @default(uuid()) @db.Uuid
+  description String
+  percentage  Float
+  startDate   DateTime
+  endDate     DateTime
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
 
   productId String  @unique @db.Uuid
   product   Product @relation(fields: [productId], references: [id])

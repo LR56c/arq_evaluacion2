@@ -25,7 +25,7 @@ import {
 }                                    from "../../shared/domain/value_objects/valid_date"
 
 export class UserMapper {
-  static toDTO( user: User ): UserResponse {
+  static toResponse( user: User ): UserResponse {
     return {
       id        : user.id.toString(),
       email     : user.email.value,
