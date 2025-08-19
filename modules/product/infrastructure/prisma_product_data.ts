@@ -68,6 +68,7 @@ export class PrismaProductData implements ProductDAO {
     sortBy?: ValidString,
     sortType?: ValidString ): Promise<Either<BaseException[], PaginatedResult<Product>>> {
     try {
+      let idsCount : number | undefined = undefined
       const where = {}
       if ( query.id ) {
         // @ts-ignore
@@ -79,6 +80,7 @@ export class PrismaProductData implements ProductDAO {
         const arr: string[] = query.ids.split( "," )
         const ids           = arr.map(
           i => UUID.from( i ).toString() )
+        idsCount = ids.length
         // @ts-ignore
         where["id"]         = {
           in: ids
@@ -121,6 +123,10 @@ export class PrismaProductData implements ProductDAO {
         } )
       ] )
       const [response, total] = results
+
+      if( idsCount && response.length !== idsCount ) {
+        return left( [new InfrastructureException( "Not all products found" )] )
+      }
       const result: Product[] = []
       for ( const e of response ) {
         const sellerDb       = e.seller

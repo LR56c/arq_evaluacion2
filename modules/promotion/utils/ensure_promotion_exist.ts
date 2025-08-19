@@ -18,17 +18,17 @@ export const ensurePromotionExist = async ( dao : PromotionDAO, id: string): Pro
     return left( [_id] )
   }
 
-  const address = await dao.search(
+  const promotion = await dao.search(
     { id: _id.toString() }, ValidInteger.from(1))
 
-  if (isLeft(address)) {
-    return left(address.left)
+  if (isLeft(promotion)) {
+    return left(promotion.left)
   }
 
-  if(address.right[0].id.toString() !== id) {
+  if(promotion.right.items[0].id.toString() !== id) {
     return left( [new DataNotFoundException()] )
   }
 
 
-  return right( address.right[0] )
+  return right( promotion.right.items[0] )
 }
