@@ -5,6 +5,7 @@ import Aura        from "@primeuix/themes/aura"
 export default defineNuxtConfig( {
   compatibilityDate: "2025-07-15",
   devtools         : { enabled: true },
+
   modules          : [
     "vue-mess-detector-nuxt-devtools",
     "@prisma/nuxt",
@@ -13,17 +14,22 @@ export default defineNuxtConfig( {
     "@peterbud/nuxt-query",
     "@vueuse/nuxt",
     "nuxt-security",
-    "@nuxt/icon"
+    "@nuxt/icon",
+    "@sentry/nuxt/module"
   ],
+
   nuxtQuery        : {
     autoImports: ["useQuery"]
   },
+
   css              : ["../assets/css/main.css", "primeicons/primeicons.css"],
+
   vite             : {
     plugins: [
       tailwindcss()
     ]
   },
+
   primevue         : {
     options: {
       theme: {
@@ -35,7 +41,21 @@ export default defineNuxtConfig( {
       }
     }
   },
+
   build            : {
     transpile: ["fp-ts"]
+  },
+
+  sentry: {
+    sourceMapsUploadOptions: {
+      org: "none-w66",
+      project: "shop-nuxt"
+    },
+
+    autoInjectServerSentry: "top-level-import"
+  },
+
+  sourcemap: {
+    client: "hidden"
   }
 } )

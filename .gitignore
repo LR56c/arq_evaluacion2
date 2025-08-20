@@ -24,3 +24,6 @@ logs
 !.env.example
 
 /lib/generated/prisma
+
+# Sentry Config File
+.env.sentry-build-plugin

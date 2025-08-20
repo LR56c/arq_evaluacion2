@@ -15,6 +15,7 @@
     "@peterbud/nuxt-query": "1.0.0",
     "@primeuix/themes": "^1.2.3",
     "@prisma/nuxt": "^0.3.0",
+    "@sentry/nuxt": "10",
     "@tailwindcss/vite": "^4.1.11",
     "@tanstack/vue-query": "^5.83.1",
     "@vee-validate/nuxt": "^4.15.1",
@@ -41,5 +42,8 @@
   "devDependencies": {
     "@primevue/nuxt-module": "^4.3.7",
     "vue-mess-detector-nuxt-devtools": "^0.1.2"
+  },
+  "overrides": {
+    "@vercel/nft": "^0.27.4"
   }
 }
