@@ -3,7 +3,7 @@ import { ValidInteger }  from "../../shared/domain/value_objects/valid_integer"
 import { Errors }        from "../../shared/domain/exceptions/errors"
 import { BaseException } from "../../shared/domain/exceptions/base_exception"
 
-export class PromotionProduct {
+export class OrderItem {
   private constructor(
     readonly product: Product,
     readonly quantity: ValidInteger
@@ -14,8 +14,8 @@ export class PromotionProduct {
   static create(
     product: Product,
     quantity: number
-  ): PromotionProduct | Errors {
-    return PromotionProduct.fromPrimitives(
+  ): OrderItem | Errors {
+    return OrderItem.fromPrimitives(
       product,
       quantity
     )
@@ -24,7 +24,7 @@ export class PromotionProduct {
   static fromPrimitives(
     product: Product,
     quantity: number
-  ): PromotionProduct | Errors {
+  ): OrderItem | Errors {
     const errors    = []
     const _quantity = ValidInteger.from( quantity )
 
@@ -36,7 +36,7 @@ export class PromotionProduct {
       return new Errors( errors )
     }
 
-    return new PromotionProduct(
+    return new OrderItem(
       product,
       _quantity as ValidInteger
     )

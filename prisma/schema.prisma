@@ -198,6 +198,7 @@ model Shipment {
   deliveryDateTime DateTime?
   address          Address   @relation(fields: [addressId], references: [id])
   addressId        String    @db.Uuid
+  createdAt        DateTime  @default(now())
 }
 
 model Address {

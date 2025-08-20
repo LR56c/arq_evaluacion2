@@ -7,6 +7,7 @@ import { Address }                   from "../domain/address"
 import {
   genericEnsureSearch
 }                                    from "../../shared/utils/generic_ensure_search"
+import { PaginatedResult }           from "../../shared/domain/paginated_result"
 
 export class SearchAddress {
   constructor( private readonly dao: AddressDAO ) {
@@ -14,7 +15,7 @@ export class SearchAddress {
 
   async execute( query: Record<string, any>, limit ?: number,
     skip ?: string, sortBy ?: string,
-    sortType ?: string ): Promise<Either<BaseException[], Address[]>> {
+    sortType ?: string ): Promise<Either<BaseException[], PaginatedResult<Address>>> {
     const searchParamsResult = genericEnsureSearch( limit, skip, sortBy,
       sortType )
 

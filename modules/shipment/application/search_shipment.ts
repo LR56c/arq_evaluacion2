@@ -3,17 +3,17 @@ import {
   BaseException
 }                               from "../../shared/domain/exceptions/base_exception"
 import { genericEnsureSearch } from "../../shared/utils/generic_ensure_search"
-import { SaleDAO }              from "../domain/sale_dao"
-import { Sale }                 from "../domain/sale"
+import { ShipmentDAO }          from "../domain/shipment_dao"
+import { Shipment }             from "../domain/shipment"
 import { PaginatedResult }      from "../../shared/domain/paginated_result"
 
-export class SearchSale {
-  constructor( private readonly dao: SaleDAO ) {
+export class SearchShipment {
+  constructor( private readonly dao: ShipmentDAO ) {
   }
 
   async execute( query: Record<string, any>, limit ?: number,
     skip ?: string, sortBy ?: string,
-    sortType ?: string ): Promise<Either<BaseException[], PaginatedResult<Sale>>> {
+    sortType ?: string ): Promise<Either<BaseException[], PaginatedResult<Shipment>>> {
     const searchParamsResult = genericEnsureSearch( limit, skip, sortBy,
       sortType )
 

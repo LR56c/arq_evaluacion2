@@ -4,9 +4,6 @@ import {
   BaseException
 }                                      from "../../shared/domain/exceptions/base_exception"
 import { PromotionDTO }                from "./promotion_dto"
-import {
-  ensureSaleExist
-}                                      from "../../sales/utils/ensure_sale_exist"
 import { containError }                from "../../shared/utils/contain_error"
 import {
   DataNotFoundException
@@ -19,11 +16,6 @@ import {
 import {
   SearchProduct
 }                                      from "../../product/application/search_product"
-import {
-  ProductResponse
-}                                      from "../../product/application/product_response"
-import { PromotionProduct }            from "../domain/promotion_product"
-import { PromotionProductDTO }         from "./promotion_product_dto"
 import { combineProducts }             from "../utils/combine_products"
 
 export class AddPromotion {
