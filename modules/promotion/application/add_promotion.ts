@@ -19,6 +19,12 @@ import {
 import {
   SearchProduct
 }                                      from "../../product/application/search_product"
+import {
+  ProductResponse
+}                                      from "../../product/application/product_response"
+import { PromotionProduct }            from "../domain/promotion_product"
+import { PromotionProductDTO }         from "./promotion_product_dto"
+import { combineProducts }             from "../utils/combine_products"
 
 export class AddPromotion {
   constructor(
@@ -27,6 +33,7 @@ export class AddPromotion {
   )
   {
   }
+
 
   async execute( dto: PromotionDTO ): Promise<Either<BaseException[], boolean>> {
 
@@ -38,15 +45,11 @@ export class AddPromotion {
       }
     }
 
-    const verifyProducts = await this.searchProducts.execute(
-      { ids: dto.products.map( p => p.product.id ) } )
+    const verifyProducts = await combineProducts(this.searchProducts, dto.products )
 
     if ( isLeft( verifyProducts ) ) {
       return left( verifyProducts.left )
     }
-
-    const products = verifyProducts.right.items
-    //TODO: emparejar los productos con los ids de dto.products
 
     const promotion = Promotion.create(
       dto.id,
@@ -55,7 +58,7 @@ export class AddPromotion {
       dto.start_date,
       dto.end_date,
       dto.is_active,
-      [],
+      verifyProducts.right,
       dto.description
     )
 
