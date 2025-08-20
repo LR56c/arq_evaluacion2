@@ -1,9 +1,9 @@
 import { ProductDAO }          from "../domain/product_dao"
-import { Product }             from "../domain/product"
-import { Either, left, right } from "fp-ts/Either"
+import { Product }                     from "../domain/product"
+import { Either, isLeft, left, right } from "fp-ts/Either"
 import {
   BaseException
-}                              from "../../shared/domain/exceptions/base_exception"
+}                                      from "../../shared/domain/exceptions/base_exception"
 import { UUID }                from "../../shared/domain/value_objects/uuid"
 import {
   ValidInteger
@@ -61,6 +61,48 @@ export class PrismaProductData implements ProductDAO {
     catch ( error ) {
       return left( new InfrastructureException() )
     }
+  }
+
+  parseProductData( data : any) : Either<BaseException[], {
+    user : User,
+    sale ?: Sale
+  }>{
+    const sellerDb       = data.seller
+    const sellerMetadata = JSON.parse( sellerDb.metadata )
+    const seller         = User.fromPrimitives(
+      sellerDb.id.toString(),
+      sellerDb.name,
+      sellerDb.email,
+      sellerMetadata,
+      [],
+      sellerDb.createdAt.toString(),
+      sellerDb.updatedAt?.toString()
+    )
+    if ( seller instanceof Errors ) {
+      return left( seller.values )
+    }
+    let sale: Sale | undefined = undefined
+    if ( data.sale ) {
+      const saleMapped = Sale.fromPrimitives(
+        data.sale.id.toString(),
+        data.sale.description,
+        data.sale.percentage,
+        data.sale.startDate.toString(),
+        data.sale.endDate.toString(),
+        data.sale.isActive,
+        data.sale.createdAt.toString(),
+        data.sale.productId.toString()
+      )
+
+      if ( saleMapped instanceof Errors ) {
+        return left( saleMapped.values )
+      }
+      sale = saleMapped
+    }
+    return right( {
+      user : seller,
+      sale
+    } )
   }
 
   async search( query: Record<string, any>, limit?: ValidInteger,
@@ -129,38 +171,13 @@ export class PrismaProductData implements ProductDAO {
       }
       const result: Product[] = []
       for ( const e of response ) {
-        const sellerDb       = e.seller
-        const sellerMetadata = JSON.parse( sellerDb.metadata )
-        const seller         = User.fromPrimitives(
-          sellerDb.id.toString(),
-          sellerDb.name,
-          sellerDb.email,
-          sellerMetadata,
-          [],
-          sellerDb.createdAt.toString(),
-          sellerDb.updatedAt?.toString()
-        )
-        if ( seller instanceof Errors ) {
-          return left( seller.values )
-        }
-        let sale: Sale | undefined = undefined
-        if ( e.sale ) {
-          const saleMapped = Sale.fromPrimitives(
-            e.sale.id.toString(),
-            e.sale.description,
-            e.sale.percentage,
-            e.sale.startDate.toString(),
-            e.sale.endDate.toString(),
-            e.sale.isActive,
-            e.sale.createdAt.toString(),
-            e.sale.productId.toString()
-          )
 
-          if ( saleMapped instanceof Errors ) {
-            return left( saleMapped.values )
-          }
-          sale = saleMapped
+        const data = this.parseProductData( e )
+        if ( isLeft(data) ) {
+          return left( data.left )
         }
+        const { user: seller, sale } = data.right
+
         const mapped = Product.fromPrimitives(
           e.id,
           e.name,

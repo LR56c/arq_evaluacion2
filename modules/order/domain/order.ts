@@ -36,10 +36,9 @@ export class Order {
     status: string,
     items: OrderItem[],
     createdAt: Date | string,
-    updatedAt ?: Date | string
   ): Order | Errors {
     return Order.fromPrimitives(
-      id, user, total, status, items, createdAt, updatedAt
+      id, user, total, status, items, createdAt, undefined
     )
   }
 

@@ -15,7 +15,7 @@ model User {
   emailVerified Boolean
   image         String?
   createdAt     DateTime
-  updatedAt     DateTime
+  updatedAt     DateTime?
   sessions      Session[]
   accounts      Account[]
   Order         Order[]
@@ -115,7 +115,7 @@ model Product {
   stock       Int                @default(0)
   imageUrl    String?
   createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  updatedAt   DateTime?
   saleId      String?
   sale        Sale?
   promotions  PromotionProduct[]
@@ -173,7 +173,7 @@ model Order {
   total      Float
   status     OrderStatus @default(PENDING)
   createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  updatedAt  DateTime?
   orderItems OrderItem[]
   shipment   Shipment?
 }

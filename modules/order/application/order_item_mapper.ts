@@ -11,12 +11,18 @@ import {
 import { Product }             from "../../product/domain/product"
 import { ProductResponse }     from "../../product/application/product_response"
 import { OrderItem }           from "../domain/order_item"
+import { UUID }                from "../../shared/domain/value_objects/uuid"
+import {
+  ValidDecimal
+}                              from "../../shared/domain/value_objects/valid_decimal"
 
 export class OrderItemMapper {
   static toDTO(
     item: OrderItem
   ): OrderItemDTO {
     return {
+      id: item.id.toString(),
+      price_at_purchase: item.priceAtPurchase.value,
       product : ProductMapper.toResponse( item.product ),
       quantity: item.quantity.value
     }
@@ -24,6 +30,14 @@ export class OrderItemMapper {
 
   static fromJSON( json: Record<string, any> ): OrderItemDTO | Errors {
     const errors  = []
+
+    const id      = wrapType( () => UUID.from(json.id) )
+    if ( id instanceof BaseException ) errors.push( id )
+
+    const priceAtPurchase = wrapType( () => ValidDecimal.from( json.price_at_purchase ) )
+
+    if ( priceAtPurchase instanceof BaseException ) errors.push( priceAtPurchase )
+
     const product = ProductMapper.fromJSON( json.product )
     if ( product instanceof Errors ) errors.push( ...product.values )
 
@@ -35,6 +49,8 @@ export class OrderItemMapper {
     }
 
     return {
+      id: (id as UUID ).toString(),
+      price_at_purchase: (priceAtPurchase as ValidDecimal).value,
       product : product as ProductResponse,
       quantity: (
         quantity as ValidInteger
@@ -48,6 +64,8 @@ export class OrderItemMapper {
       return product
     }
     return OrderItem.fromPrimitives(
+      json.id,
+      json.price_at_purchase,
       product as Product,
       json.quantity
     )

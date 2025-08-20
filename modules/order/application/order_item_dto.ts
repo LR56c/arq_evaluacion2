@@ -7,7 +7,9 @@ import {
 }            from "../../product/application/product_response"
 
 export const orderItemSchema = z.object( {
+  id: z.uuid(),
   quantity: z.number(),
+  price_at_purchase: z.number(),
   product : productResponseSchema
 } )
 
