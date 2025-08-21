@@ -27,7 +27,7 @@ export class User {
     metadata: Record<string, any>,
     roles: Role[],
   ): User {
-    return User.fromPrimitives( id, name, email, metadata, roles, ValidDate.nowUTC(), null ) as User
+    return User.fromPrimitives( id, name, email, metadata, roles, ValidDate.nowUTC(), undefined ) as User
   }
 
   static fromPrimitivesThrow(
@@ -57,7 +57,7 @@ export class User {
     metadata: Record<string, any>,
     roles: Role[],
     createdAt: Date | string,
-    updatedAt: Date | string | null
+    updatedAt?: Date | string
   ): User | Errors {
    const errors = []
 

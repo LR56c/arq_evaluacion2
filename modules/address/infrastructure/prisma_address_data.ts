@@ -20,6 +20,9 @@ import {
 import { AddressDAO }               from "../domain/address_dao"
 import { Address }                  from "../domain/address"
 import { Country }                  from "../../country/domain/country"
+import type {
+  PaginatedResult
+}                                   from "~~/modules/shared/domain/paginated_result"
 
 export class PrismaAddressData implements AddressDAO {
   constructor( private readonly db: PrismaClient ) {
@@ -28,7 +31,7 @@ export class PrismaAddressData implements AddressDAO {
   async search( query: Record<string, any>, limit?: ValidInteger,
     skip?: ValidString,
     sortBy?: ValidString,
-    sortType?: ValidString ): Promise<Either<BaseException[], Address[]>> {
+    sortType?: ValidString ): Promise<Either<BaseException[], PaginatedResult<Address>>> {
     try {
       const where = {}
       if ( query.id ) {
@@ -67,16 +70,21 @@ export class PrismaAddressData implements AddressDAO {
         orderBy[key] = sortType ? sortType.value : "desc"
       }
       const offset   = skip ? parseInt( skip.value ) : 0
-      const response = await this.db.address.findMany( {
-        where  : where,
-        orderBy: orderBy,
-        skip   : offset,
-        take   : limit?.value,
-        include: {
-          country: true
-        }
-      } )
-
+      const results = await this.db.$transaction([
+        this.db.address.findMany( {
+          where  : where,
+          orderBy: orderBy,
+          skip   : offset,
+          take   : limit?.value,
+          include: {
+            country: true
+          }
+        } ),
+        this.db.address.count( {
+          where: where
+        } )
+      ])
+      const [response, total] = results
       const result: Address[] = []
       for ( const e of response ) {
         const country = e.country
@@ -106,7 +114,10 @@ export class PrismaAddressData implements AddressDAO {
         }
         result.push( mapped )
       }
-      return right( result )
+      return right( {
+        items: result,
+        total: total
+      } )
     }
     catch ( e ) {
       return left( [new InfrastructureException()] )

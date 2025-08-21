@@ -78,7 +78,7 @@ export class UpdateUser {
       dto.metadata ? dto.metadata : prevUser.metadata.toString(),
       newRoles,
       prevUser.createdAt.toString(),
-      prevUser.updatedAt.toString()
+      prevUser.updatedAt?.toString()
     )
 
     if ( newUser instanceof Errors ) {

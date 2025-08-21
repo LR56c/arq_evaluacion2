@@ -12,8 +12,8 @@ import {
 import prisma             from "~~/lib/prisma"
 
 const dao                    = new PrismaCountryData( prisma )
-const search                 = new SearchCountry( dao )
+export const searchCountry                 = new SearchCountry( dao )
 const countryLogger          = new SentryInstrumentation( "country" )
 const countryInstrumentation = new CountryInstrumentation( countryLogger )
-export const countryService  = new CountryService( search,
+export const countryService  = new CountryService( searchCountry,
   countryInstrumentation )
