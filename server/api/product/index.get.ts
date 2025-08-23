@@ -1,17 +1,11 @@
-import { z }              from "zod"
+import { querySchema }    from "~~/modules/shared/application/query_dto"
 import { isLeft }         from "fp-ts/Either"
 import { parseData }      from "~~/modules/shared/application/parse_handlers"
-import { addressService } from "~~/server/dependencies/address_dependencies"
+import { productService } from "~~/server/dependencies/product_dependencies"
 
 export default defineEventHandler( async ( event ) => {
-
-  const id = getRouterParam( event, "id" )
-
-  const dataResult  = await parseData( z.object( {
-    id: z.string()
-  } ), {
-    id
-  } )
+  const query = getQuery( event )
+  const dataResult  = parseData(querySchema, query)
 
   if( isLeft(dataResult) ) {
     throw createError( {
@@ -19,8 +13,16 @@ export default defineEventHandler( async ( event ) => {
       statusMessage: "Bad Request"
     } )
   }
+  const data = dataResult.right
 
-  const result = await addressService.remove( dataResult.right.id )
+  const result   = await productService.search(
+    data.query,
+    data.limit,
+    data.skip,
+    data.sort_by,
+    data.sort_type
+  )
+
   if ( isLeft( result ) ) {
     throw createError( {
       statusCode   : 400,
@@ -30,6 +32,7 @@ export default defineEventHandler( async ( event ) => {
 
   return {
     statusMessage: "OK",
-    statusCode   : 200
+    statusCode   : 200,
+    data         : result.right
   }
 } )

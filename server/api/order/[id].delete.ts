@@ -1,7 +1,7 @@
-import { z }              from "zod"
-import { isLeft }         from "fp-ts/Either"
-import { parseData }      from "~~/modules/shared/application/parse_handlers"
-import { addressService } from "~~/server/dependencies/address_dependencies"
+import { z }            from "zod"
+import { isLeft }       from "fp-ts/Either"
+import { parseData }    from "~~/modules/shared/application/parse_handlers"
+import { orderService } from "~~/server/dependencies/order_dependencies"
 
 export default defineEventHandler( async ( event ) => {
 
@@ -20,7 +20,7 @@ export default defineEventHandler( async ( event ) => {
     } )
   }
 
-  const result = await addressService.remove( dataResult.right.id )
+  const result = await orderService.remove( dataResult.right.id )
   if ( isLeft( result ) ) {
     throw createError( {
       statusCode   : 400,

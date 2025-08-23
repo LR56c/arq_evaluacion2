@@ -49,7 +49,7 @@ export class UserService {
     }
     return right( {
       items: result.right.items.map( user => UserMapper.toResponse( user ) ),
-      total: result.right.total,
+      total: result.right.total
     } )
   }
 
@@ -58,7 +58,7 @@ export class UserService {
     if ( isLeft( result ) ) {
       await this.instrumentation.removeUserFailedFailed( result.left )
     }
-    return result
+    return right( true )
   }
 
   async update( dto: UserUpdateDTO ): Promise<Either<BaseException[], UserResponse>> {

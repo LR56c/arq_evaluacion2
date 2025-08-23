@@ -3,22 +3,22 @@ import {
   parseData
 }                 from "~~/modules/shared/application/parse_handlers"
 import {
-  addressUpdateSchema
-}                 from "~~/modules/address/application/address_update_dto"
+  promotionService
+}                 from "~~/server/dependencies/promotion_dependencies"
 import {
-  addressService
-}                 from "~~/server/dependencies/address_dependencies"
+  promotionUpdateSchema
+}                 from "~~/modules/promotion/application/promotion_update_dto"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )
-  const dataResult = await parseData( addressUpdateSchema, body )
+  const dataResult = await parseData( promotionUpdateSchema, body )
   if ( isLeft( dataResult ) ) {
     throw createError( {
       statusCode   : 400,
       statusMessage: "Bad Request"
     } )
   }
-  const result = await addressService.update( dataResult.right )
+  const result = await promotionService.update( dataResult.right )
 
   if ( isLeft( result ) ) {
     throw createError( {

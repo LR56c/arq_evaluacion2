@@ -11,7 +11,9 @@ import {
 import {
   UserInstrumentation
 }                      from "~~/server/instrumentation/user_instrumentation"
-import { PrismaUserData } from "~~/modules/user/infrastructure/prisma_user_data"
+import {
+  PrismaUserData
+}                      from "~~/modules/user/infrastructure/prisma_user_data"
 
 const dao                 = new PrismaUserData( prisma )
 const add                 = new AddUser( dao, searchRole )

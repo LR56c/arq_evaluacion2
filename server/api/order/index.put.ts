@@ -1,24 +1,22 @@
-import { isLeft } from "fp-ts/Either"
+import { isLeft }       from "fp-ts/Either"
 import {
   parseData
-}                 from "~~/modules/shared/application/parse_handlers"
+}                       from "~~/modules/shared/application/parse_handlers"
+import { orderService } from "~~/server/dependencies/order_dependencies"
 import {
-  addressUpdateSchema
-}                 from "~~/modules/address/application/address_update_dto"
-import {
-  addressService
-}                 from "~~/server/dependencies/address_dependencies"
+  orderUpdatedSchema
+}                       from "~~/modules/order/application/order_updated_dto"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )
-  const dataResult = await parseData( addressUpdateSchema, body )
+  const dataResult = await parseData( orderUpdatedSchema, body )
   if ( isLeft( dataResult ) ) {
     throw createError( {
       statusCode   : 400,
       statusMessage: "Bad Request"
     } )
   }
-  const result = await addressService.update( dataResult.right )
+  const result = await orderService.update( dataResult.right )
 
   if ( isLeft( result ) ) {
     throw createError( {

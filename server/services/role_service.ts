@@ -1,17 +1,25 @@
 import { AddRole }             from "~~/modules/role/application/add_role"
-import { RemoveRole }          from "~~/modules/role/application/remove_role"
-import { SearchRole }          from "~~/modules/role/application/search_role"
-import { UpdateRole }          from "~~/modules/role/application/update_role"
+import {
+  RemoveRole
+}                              from "~~/modules/role/application/remove_role"
+import {
+  SearchRole
+}                              from "~~/modules/role/application/search_role"
+import {
+  UpdateRole
+}                              from "~~/modules/role/application/update_role"
 import type { RoleDTO }        from "~~/modules/role/application/role_dto"
 import type { Either }         from "fp-ts/Either"
 import { isLeft, left, right } from "fp-ts/Either"
 import {
   BaseException
 }                              from "~~/modules/shared/domain/exceptions/base_exception"
-import { RoleMapper }          from "~~/modules/role/application/role_mapper"
+import {
+  RoleMapper
+}                              from "~~/modules/role/application/role_mapper"
 import type {
   RoleInstrumentation
-} from "~~/server/instrumentation/role_instrumentation"
+}                              from "~~/server/instrumentation/role_instrumentation"
 
 export class RoleService {
   constructor(
@@ -29,7 +37,7 @@ export class RoleService {
     if ( isLeft( result ) ) {
       await this.instrumentation.addRoleFailed( result.left )
     }
-    return result
+    return right( true )
   }
 
   async remove( id: string ): Promise<Either<BaseException[], boolean>> {
@@ -37,7 +45,7 @@ export class RoleService {
     if ( isLeft( result ) ) {
       await this.instrumentation.removeRoleFailed( result.left )
     }
-    return result
+    return right( true )
   }
 
   async search( query: Record<string, any>, limit ?: number, skip ?: string,
@@ -60,6 +68,6 @@ export class RoleService {
     if ( isLeft( result ) ) {
       await this.instrumentation.updateRoleFailed( result.left )
     }
-    return result
+    return right( true )
   }
 }

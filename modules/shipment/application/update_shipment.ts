@@ -1,17 +1,23 @@
-import { ShipmentDAO }                 from "../domain/shipment_dao"
+import { ShipmentDAO } from "../domain/shipment_dao"
 import { Either, isLeft, left, right } from "fp-ts/Either"
 import {
   BaseException
-}                                      from "../../shared/domain/exceptions/base_exception"
-import { ShipmentUpdateDTO }    from "./shipment_update_dto"
-import { ensureShipmentExist }  from "../utils/ensure_shipment_exist"
-import { SearchAddress }        from "../../address/application/search_address"
-import { SearchOrder }          from "../../order/application/search_order"
+} from "../../shared/domain/exceptions/base_exception"
+import { ShipmentUpdateDTO } from "./shipment_update_dto"
+import { ensureShipmentExist } from "../utils/ensure_shipment_exist"
+import {
+  SearchAddress
+} from "../../address/application/search_address"
+import {
+  SearchOrder
+} from "../../order/application/search_order"
 import {
   DataNotFoundException
-}                               from "../../shared/domain/exceptions/data_not_found_exception"
-import { Shipment }             from "../domain/shipment"
-import { Errors }               from "../../shared/domain/exceptions/errors"
+} from "../../shared/domain/exceptions/data_not_found_exception"
+import { Shipment } from "../domain/shipment"
+import {
+  Errors
+} from "../../shared/domain/exceptions/errors"
 
 export class UpdateShipment {
   constructor(
@@ -68,9 +74,10 @@ export class UpdateShipment {
       orderId,
       addressId,
       dto.tracking_number ?? existResult.right.trackingNumber.value,
+      existResult.right.createdAt.toString(),
       dto.pickup_date_time ?? existResult.right.pickupDateTime?.toString(),
       dto.shipping_date_time ?? existResult.right.shippingDateTime?.toString(),
-      dto.delivery_date_time ?? existResult.right.deliveryDateTime?.toString(),
+      dto.delivery_date_time ?? existResult.right.deliveryDateTime?.toString()
     )
 
     if ( shipment instanceof Errors ) {

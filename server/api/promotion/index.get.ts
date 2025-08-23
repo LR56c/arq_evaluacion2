@@ -1,7 +1,7 @@
-import { parseData }      from "~~/modules/shared/application/parse_handlers"
-import { querySchema }    from "~~/modules/shared/application/query_dto"
-import { isLeft }         from "fp-ts/Either"
-import { countryService } from "~~/server/dependencies/country_dependencies"
+import { querySchema }      from "~~/modules/shared/application/query_dto"
+import { isLeft }           from "fp-ts/Either"
+import { parseData }        from "~~/modules/shared/application/parse_handlers"
+import { promotionService } from "~~/server/dependencies/promotion_dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const query = getQuery( event )
@@ -15,8 +15,13 @@ export default defineEventHandler( async ( event ) => {
   }
   const data = dataResult.right
 
-  const result   = await countryService.search( data.query, data.limit,
-    data.skip, data.sort_by, data.sort_type )
+  const result   = await promotionService.search(
+    data.query,
+    data.limit,
+    data.skip,
+    data.sort_by,
+    data.sort_type
+  )
 
   if ( isLeft( result ) ) {
     throw createError( {

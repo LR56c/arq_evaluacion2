@@ -1,7 +1,7 @@
-import { z }              from "zod"
-import { isLeft }         from "fp-ts/Either"
-import { parseData }      from "~~/modules/shared/application/parse_handlers"
-import { addressService } from "~~/server/dependencies/address_dependencies"
+import { z }                from "zod"
+import { isLeft }           from "fp-ts/Either"
+import { parseData }        from "~~/modules/shared/application/parse_handlers"
+import { promotionService } from "~~/server/dependencies/promotion_dependencies"
 
 export default defineEventHandler( async ( event ) => {
 
@@ -20,7 +20,7 @@ export default defineEventHandler( async ( event ) => {
     } )
   }
 
-  const result = await addressService.remove( dataResult.right.id )
+  const result = await promotionService.remove( dataResult.right.id )
   if ( isLeft( result ) ) {
     throw createError( {
       statusCode   : 400,

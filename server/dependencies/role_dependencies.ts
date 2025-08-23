@@ -10,7 +10,9 @@ import {
 import {
   SentryInstrumentation
 }                      from "~~/shared/infrastructure/sentry_instrumentation"
-import { PrismaRoleData } from "~~/modules/role/infrastructure/prisma_role_data"
+import {
+  PrismaRoleData
+}                      from "~~/modules/role/infrastructure/prisma_role_data"
 
 const dao                 = new PrismaRoleData( prisma )
 const add                 = new AddRole( dao )

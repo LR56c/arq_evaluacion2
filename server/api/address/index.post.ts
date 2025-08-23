@@ -1,10 +1,8 @@
-import { isLeft }        from "fp-ts/Either"
-import {
-  addressService
-}                        from "~~/server/dependencies/address_dependencies"
-import { parseData }     from "~~/modules/shared/application/parse_handlers"
-import { addressSchema } from "~~/modules/address/application/address_dto"
-import { z }             from "zod"
+import { isLeft }         from "fp-ts/Either"
+import { addressService } from "~~/server/dependencies/address_dependencies"
+import { parseData }      from "~~/modules/shared/application/parse_handlers"
+import { addressSchema }  from "~~/modules/address/application/address_dto"
+import { z }              from "zod"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )

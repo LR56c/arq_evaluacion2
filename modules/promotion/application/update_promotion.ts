@@ -50,7 +50,7 @@ export class UpdatePromotion {
       dto.is_active ?? existResult.right.isActive.value,
       promotionProducts,
       existResult.right.createdAt.toString(),
-      dto.description ?? existResult.right.description.value
+      dto.description ?? existResult.right.description?.value
     )
 
     if ( promotion instanceof Errors ) {

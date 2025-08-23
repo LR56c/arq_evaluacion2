@@ -3,22 +3,23 @@ import {
   parseData
 }                 from "~~/modules/shared/application/parse_handlers"
 import {
-  addressUpdateSchema
-}                 from "~~/modules/address/application/address_update_dto"
+  productService
+}                 from "~~/server/dependencies/product_dependencies"
 import {
-  addressService
-}                 from "~~/server/dependencies/address_dependencies"
+  productRequestSchema
+}                 from "~~/modules/product/application/product_request"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )
-  const dataResult = await parseData( addressUpdateSchema, body )
+  const dataResult = await parseData( productRequestSchema, body )
+
   if ( isLeft( dataResult ) ) {
     throw createError( {
       statusCode   : 400,
       statusMessage: "Bad Request"
     } )
   }
-  const result = await addressService.update( dataResult.right )
+  const result = await productService.add( dataResult.right )
 
   if ( isLeft( result ) ) {
     throw createError( {
@@ -26,6 +27,7 @@ export default defineEventHandler( async ( event ) => {
       statusMessage: "Bad Request"
     } )
   }
+
   return {
     statusMessage: "OK",
     statusCode   : 200
