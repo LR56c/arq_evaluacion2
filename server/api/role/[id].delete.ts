@@ -1,13 +1,24 @@
-import { parseParams } from "~~/server/utils/parse_handlers"
-import { z }           from "h3-zod"
 import { isLeft }      from "fp-ts/Either"
 import { roleService } from "~~/server/dependencies/role_dependencies"
+import { parseData }   from "~~/modules/shared/application/parse_handlers"
+import { z }           from "zod"
 
 export default defineEventHandler( async ( event ) => {
-  const param  = await parseParams( event, z.object( {
+  const id = getRouterParam( event, "id" )
+
+  const dataResult = await parseData( z.object( {
     id: z.string()
-  } ) )
-  const result = await roleService.remove( param.id )
+  } ), {
+    id
+  } )
+
+  if ( isLeft( dataResult ) ) {
+    throw createError( {
+      statusCode   : 400,
+      statusMessage: "Bad Request"
+    } )
+  }
+  const result = await roleService.remove( dataResult.right.id )
   if ( isLeft( result ) ) {
     throw createError( {
       statusCode   : 400,
