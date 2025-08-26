@@ -1,30 +1,38 @@
 import { type Either, isLeft, left, right } from "fp-ts/Either"
 import {
-  SearchRole
-}                                           from "../../role/application/search_role"
-import { UserDAO }                          from "../domain/user_dao"
-import {
-  BaseException
-}                                           from "../../shared/domain/exceptions/base_exception"
-import { wrapType }                         from "../../shared/utils/wrap_type"
+  ValidInteger
+}                                           from "~~/modules/shared/domain/value_objects/valid_integer"
 import {
   UUID
-}                                           from "../../shared/domain/value_objects/uuid"
-import { UserRequest }                      from "./user_request"
-import { User }                             from "../domain/user"
-import { ensureRoles }                      from "../utils/ensure_roles"
+}                                           from "~~/modules/shared/domain/value_objects/uuid"
 import {
-  Errors
-}                                           from "../../shared/domain/exceptions/errors"
+  BaseException
+}                                           from "~~/modules/shared/domain/exceptions/base_exception"
 import {
-  ValidInteger
-}                                           from "../../shared/domain/value_objects/valid_integer"
+  wrapType
+}                                           from "~~/modules/shared/utils/wrap_type"
+import type {
+  SearchRole
+}                                           from "~~/modules/role/application/search_role"
+import type {
+  UserDAO
+}                                           from "~~/modules/user/domain/user_dao"
 import {
   DataNotFoundException
-}                                           from "../../shared/domain/exceptions/data_not_found_exception"
+}                                           from "~~/modules/shared/domain/exceptions/data_not_found_exception"
 import {
   DataAlreadyExistException
-}                                           from "../../shared/domain/exceptions/data_already_exist_exception"
+}                                           from "~~/modules/shared/domain/exceptions/data_already_exist_exception"
+import type {
+  UserRequest
+}                                           from "~~/modules/user/application/models/user_request"
+import { User }                             from "~~/modules/user/domain/user"
+import {
+  ensureRoles
+}                                           from "~~/modules/user/utils/ensure_roles"
+import {
+  Errors
+}                                           from "~~/modules/shared/domain/exceptions/errors"
 
 export class AddUser {
   constructor(
@@ -50,7 +58,7 @@ export class AddUser {
       return notFound ? right( true ) : left( existResult.left )
     }
 
-    if ( existResult.right[0].id.toString() === id ) {
+    if ( existResult.right.items[0].id.toString() === id ) {
       return left( [new DataAlreadyExistException()] )
     }
     return right( true )
@@ -64,7 +72,8 @@ export class AddUser {
       return left( userNotExist.left )
     }
 
-    const roleResult = await ensureRoles( this.searchRole, request.roles )
+    const roleResult = await ensureRoles( this.searchRole,
+      request.metadata.roles )
 
     if ( isLeft( roleResult ) ) {
       return left( roleResult.left )

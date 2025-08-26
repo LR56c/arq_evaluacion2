@@ -1,13 +1,15 @@
 import { type Either, isLeft, left } from "fp-ts/Either"
-import {
+import type { UserDAO }              from "~~/modules/user/domain/user_dao"
+import type {
   BaseException
-}                                    from "../../shared/domain/exceptions/base_exception"
-import { User }                      from "../domain/user"
+}                                    from "~~/modules/shared/domain/exceptions/base_exception"
+import type {
+  PaginatedResult
+}                                    from "~~/modules/shared/domain/paginated_result"
+import type { User }                 from "~~/modules/user/domain/user"
 import {
   genericEnsureSearch
-}                                    from "../../shared/utils/generic_ensure_search"
-import { UserDAO }                   from "../domain/user_dao"
-import { PaginatedResult }           from "../../shared/domain/paginated_result"
+}                                    from "~~/modules/shared/utils/generic_ensure_search"
 
 export class SearchUser {
   constructor( private readonly dao: UserDAO ) {

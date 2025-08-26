@@ -1,7 +1,9 @@
 import { isLeft }            from "fp-ts/Either"
-import { userService }       from "~~/server/dependencies/user_dependencies"
-import { userRequestSchema } from "~~/modules/user/application/user_request"
 import { parseData }         from "~~/modules/shared/application/parse_handlers"
+import { userService }       from "~~/server/dependencies/dependencies"
+import {
+  userRequestSchema
+}                            from "~~/modules/user/application/models/user_request"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )

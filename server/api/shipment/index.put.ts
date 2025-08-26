@@ -3,11 +3,9 @@ import {
   parseData
 }                 from "~~/modules/shared/application/parse_handlers"
 import {
-  shipmentService
-}                 from "~~/server/dependencies/shipment_dependencies"
-import {
   shipmentUpdateSchema
 }                 from "~~/modules/shipment/application/shipment_update_dto"
+import { shipmentService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )

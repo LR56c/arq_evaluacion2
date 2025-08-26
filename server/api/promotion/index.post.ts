@@ -1,9 +1,9 @@
 import { isLeft }           from "fp-ts/Either"
 import { parseData }        from "~~/modules/shared/application/parse_handlers"
-import { promotionService } from "~~/server/dependencies/promotion_dependencies"
 import {
   promotionSchema
 }                           from "~~/modules/promotion/application/promotion_dto"
+import { promotionService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )

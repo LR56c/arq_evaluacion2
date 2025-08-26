@@ -1,8 +1,8 @@
 import { z }          from "zod"
-import { roleSchema } from "../../role/application/role_dto"
-import { jsonSchema } from "../../shared/domain/json_schema"
+import { jsonSchema } from "../../../shared/domain/json_schema"
+import { roleSchema } from "../../../role/application/role_dto"
 
-export const userResponseSchema = z.object( {
+export const userAdminResponseSchema = z.object( {
   id        : z.uuid(),
   name      : z.string(),
   email     : z.email(),
@@ -12,4 +12,4 @@ export const userResponseSchema = z.object( {
   updated_at: z.iso.datetime().optional()
 } )
 
-export type UserResponse = z.infer<typeof userResponseSchema>
+export type UserAdminResponse = z.infer<typeof userAdminResponseSchema>

@@ -2,13 +2,12 @@ import { z } from "zod"
 
 
 export const querySchema = z
-  .object( {
+  .looseObject( {
     limit    : z.coerce.number().optional(),
     skip     : z.string().optional(),
     sort_by  : z.string().optional(),
     sort_type: z.string().optional()
   } )
-  .passthrough()
   .transform( ( { limit, skip, sort_type, sort_by, ...rest } ) => (
     {
       limit,

@@ -1,12 +1,12 @@
 import { isLeft }      from "fp-ts/Either"
-import { userService } from "~~/server/dependencies/user_dependencies"
 import { parseData }   from "~~/modules/shared/application/parse_handlers"
 import { z }           from "zod"
+import { userService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const id = getRouterParam( event, "id" )
 
-  const dataResult  = await parseData( z.object( {
+  const dataResult  = parseData( z.object( {
     id: z.string()
   } ), {
     id

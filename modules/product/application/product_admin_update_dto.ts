@@ -1,6 +1,4 @@
 import { z }                  from "zod"
-import { userResponseSchema } from "../../user/application/user_response"
-import { saleSchema }         from "../../sales/application/sale_dto"
 
 export const productAdminUpdateSchema = z.object( {
   id         : z.uuid(),

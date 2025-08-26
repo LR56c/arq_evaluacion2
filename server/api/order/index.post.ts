@@ -1,7 +1,7 @@
 import { isLeft }       from "fp-ts/Either"
 import { parseData }    from "~~/modules/shared/application/parse_handlers"
-import { orderService } from "~~/server/dependencies/order_dependencies"
 import { orderSchema }  from "~~/modules/order/application/order_dto"
+import { orderService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )

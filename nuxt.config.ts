@@ -13,6 +13,7 @@ export default defineNuxtConfig( {
     "@primevue/nuxt-module",
     "@peterbud/nuxt-query",
     "@vueuse/nuxt",
+    '@pinia/nuxt',
     "nuxt-security",
     "@nuxt/icon",
     "@sentry/nuxt/module"

@@ -3,11 +3,9 @@ import {
   parseData
 }                 from "~~/modules/shared/application/parse_handlers"
 import {
-  promotionService
-}                 from "~~/server/dependencies/promotion_dependencies"
-import {
   promotionUpdateSchema
 }                 from "~~/modules/promotion/application/promotion_update_dto"
+import { promotionService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )

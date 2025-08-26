@@ -3,11 +3,9 @@ import {
   parseData
 }                 from "~~/modules/shared/application/parse_handlers"
 import {
-  productService
-}                 from "~~/server/dependencies/product_dependencies"
-import {
   productAdminUpdateSchema
 }                 from "~~/modules/product/application/product_admin_update_dto"
+import { productService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )

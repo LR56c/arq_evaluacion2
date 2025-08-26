@@ -1,10 +1,13 @@
 import { type Either, isLeft, left, right } from "fp-ts/Either"
-import { UserDAO }                          from "../domain/user_dao"
-import {
+import type {
+  UserDAO
+}                                           from "~~/modules/user/domain/user_dao"
+import type {
   BaseException
-}                                           from "../../shared/domain/exceptions/base_exception"
-import { ensureUserExist }                  from "../utils/ensure_user_exist"
-
+}                                           from "~~/modules/shared/domain/exceptions/base_exception"
+import {
+  ensureUserExist
+}                                           from "~~/modules/user/utils/ensure_user_exist"
 export class RemoveUser {
   constructor( private readonly dao: UserDAO ) {
   }

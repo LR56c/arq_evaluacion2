@@ -1,7 +1,7 @@
 import { querySchema } from "~~/modules/shared/application/query_dto"
 import { isLeft }      from "fp-ts/Either"
-import { roleService } from "~~/server/dependencies/role_dependencies"
 import { parseData }   from "~~/modules/shared/application/parse_handlers"
+import { roleService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
 

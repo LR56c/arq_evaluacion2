@@ -1,7 +1,7 @@
 import { z }           from "zod"
 import { isLeft }      from "fp-ts/Either"
 import { parseData }   from "~~/modules/shared/application/parse_handlers"
-import { saleService } from "~~/server/dependencies/sales_dependencies"
+import { saleService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
 

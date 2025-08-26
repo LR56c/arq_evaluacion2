@@ -1,33 +1,27 @@
 import { type Either, isLeft, left, right } from "fp-ts/Either"
-import { UserDAO }                          from "../domain/user_dao"
-import {
+import type {
+  UserDAO
+}                                           from "~~/modules/user/domain/user_dao"
+import type {
   SearchRole
-}                                           from "../../role/application/search_role"
-import {
+}                                           from "~~/modules/role/application/search_role"
+import type {
+  UserUpdateDTO
+}                                           from "~~/modules/user/application/models/user_update_dto"
+import type {
   BaseException
-}                                           from "../../shared/domain/exceptions/base_exception"
-import { User }                             from "../domain/user"
+}                                           from "~~/modules/shared/domain/exceptions/base_exception"
+import { User }                             from "~~/modules/user/domain/user"
 import {
-  UUID
-}                                           from "../../shared/domain/value_objects/uuid"
-import { wrapType, wrapTypeDefault }        from "../../shared/utils/wrap_type"
-import { UserResponse }                     from "./user_response"
-import { ensureUserExist }                  from "../utils/ensure_user_exist"
-import { Role }                             from "../../role/domain/role"
-import { ensureRoles }                      from "../utils/ensure_roles"
+  ensureUserExist
+}                                           from "~~/modules/user/utils/ensure_user_exist"
+import { Role }                             from "~~/modules/role/domain/role"
 import {
-  ValidString
-}                                           from "../../shared/domain/value_objects/valid_string"
-import { UserUpdateDTO }                    from "./user_update_dto"
-import {
-  ValidDate
-}                                           from "../../shared/domain/value_objects/valid_date"
-import {
-  ValidJSON
-}                                           from "../../shared/domain/json_schema"
+  ensureRoles
+}                                           from "~~/modules/user/utils/ensure_roles"
 import {
   Errors
-}                                           from "../../shared/domain/exceptions/errors"
+}                                           from "~~/modules/shared/domain/exceptions/errors"
 
 export class UpdateUser {
   constructor(

@@ -1,9 +1,8 @@
 import { z }                  from "zod"
-import {
-  percetageSchema
-}                             from "../../shared/domain/value_objects/valid_percentage"
-import { userResponseSchema } from "../../user/application/user_response"
 import { orderItemSchema }    from "./order_item_dto"
+import {
+  userResponseSchema
+}                             from "~~/modules/user/application/models/user_response"
 
 export const orderSchema = z.object( {
   id        : z.uuid(),

@@ -1,11 +1,11 @@
 import { isLeft }          from "fp-ts/Either"
 import { parseData }       from "~~/modules/shared/application/parse_handlers"
-import { shipmentService } from "~~/server/dependencies/shipment_dependencies"
 import { shipmentSchema }  from "~~/modules/shipment/application/shipment_dto"
+import { shipmentService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )
-  const dataResult = await parseData( shipmentSchema, body )
+  const dataResult = parseData( shipmentSchema, body )
 
   if ( isLeft( dataResult ) ) {
     throw createError( {

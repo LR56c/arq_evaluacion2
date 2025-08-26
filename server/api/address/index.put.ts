@@ -5,9 +5,7 @@ import {
 import {
   addressUpdateSchema
 }                 from "~~/modules/address/application/address_update_dto"
-import {
-  addressService
-}                 from "~~/server/dependencies/address_dependencies"
+import { addressService } from "~~/server/dependencies/dependencies"
 
 export default defineEventHandler( async ( event ) => {
   const body       = await readBody( event )
