@@ -1,7 +1,7 @@
 import { AuthAppService }  from "../application/auth_app_service"
-import { UserResponse }    from "../application/models/user_response"
-import { LoginRequest }    from "../application/models/login_request"
-import { RegisterRequest } from "../application/models/register_request"
+import type { UserResponse }    from "../application/models/user_response"
+import type { LoginRequest }    from "../application/models/login_request"
+import type { RegisterRequest } from "../application/models/register_request"
 import { authClient }      from "~~/lib/auth_client"
 
 export class BetterAuthData implements AuthAppService {
@@ -14,10 +14,13 @@ export class BetterAuthData implements AuthAppService {
       email   : dto.email,
       password: dto.password
     } )
+    console.log( "login", data, error )
     return {}
   }
 
   async logout( token?: string ): Promise<UserResponse> {
+    const { data, error } = await authClient.signOut()
+    console.log( "logout", data, error )
     return {}
   }
 

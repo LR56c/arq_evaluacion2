@@ -32,9 +32,9 @@ export class PrismaShipmentData implements ShipmentDAO {
           orderId         : shipment.orderId.value,
           addressId       : shipment.addressId.value,
           trackingNumber  : shipment.trackingNumber.value,
-          pickupDateTime  : shipment.pickupDateTime.toString(),
-          shippingDateTime: shipment.shippingDateTime.toString(),
-          deliveryDateTime: shipment.deliveryDateTime.toString(),
+          pickupDateTime  : shipment.pickupDateTime?.toString(),
+          shippingDateTime: shipment.shippingDateTime?.toString(),
+          deliveryDateTime: shipment.deliveryDateTime?.toString(),
           createdAt       : shipment.createdAt.toString()
         }
       } )
@@ -128,9 +128,9 @@ export class PrismaShipmentData implements ShipmentDAO {
           orderId         : shipment.orderId.value,
           addressId       : shipment.addressId.value,
           trackingNumber  : shipment.trackingNumber.value,
-          pickupDateTime  : shipment.pickupDateTime.toString(),
-          shippingDateTime: shipment.shippingDateTime.toString(),
-          deliveryDateTime: shipment.deliveryDateTime.toString()
+          pickupDateTime  : shipment.pickupDateTime?.toString(),
+          shippingDateTime: shipment.shippingDateTime?.toString(),
+          deliveryDateTime: shipment.deliveryDateTime?.toString()
         }
       } )
       return right( true )
