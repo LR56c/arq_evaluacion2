@@ -1,5 +1,4 @@
 import { ProductDAO } from "../domain/product_dao"
-import { SearchUser } from "../../user/application/search_user"
 import {
   SearchSale
 } from "../../sales/application/search_sale"
@@ -16,6 +15,9 @@ import { Product } from "../domain/product"
 import {
   Errors
 } from "../../shared/domain/exceptions/errors"
+import type {
+  SearchUser
+} from "~~/modules/user/application/use_cases/search_user"
 
 export class UpdateProduct {
   constructor(
@@ -57,12 +59,12 @@ export class UpdateProduct {
       if ( isLeft( saleResult ) ) {
         return left( saleResult.left )
       }
-      if ( saleResult.right.length === 0 ||
-        saleResult.right[0].id.toString() !== product.sale_id )
+      if ( saleResult.right.items.length === 0 ||
+        saleResult.right.items[0].id.toString() !== product.sale_id )
       {
         return left( [new InfrastructureException( "Sale not found" )] )
       }
-      sale = saleResult.right[0]
+      sale = saleResult.right.items[0]
     }
 
     const productToUpdate = Product.fromPrimitives(
