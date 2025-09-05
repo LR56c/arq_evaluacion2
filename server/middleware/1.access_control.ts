@@ -57,73 +57,6 @@ const auth_control: RouteControl[] = [
   }
 ]
 
-const factibility_control: RouteControl[] = [
-  {
-    base   : "/api/factibility",
-    methods: {
-      "GET"   : RoleLevel.MOD,
-      "PUT"   : RoleLevel.MOD,
-      "DELETE": RoleLevel.MOD
-    }
-  }
-]
-
-const notification_control: RouteControl[] = [
-  {
-    base   : "/api/notification",
-    methods: {
-      "POST": RoleLevel.MOD,
-      "GET" : RoleLevel.USER,
-      "PUT" : RoleLevel.USER
-    }
-  }
-]
-
-const notification_config_control: RouteControl[] = [
-  {
-    base   : "/api/notification_config",
-    methods: {
-      "POST"  : RoleLevel.USER,
-      "GET"   : RoleLevel.USER,
-      "DELETE": RoleLevel.ADMIN
-    }
-  }
-]
-
-const number_control: RouteControl[] = [
-  {
-    base   : "/api/number",
-    methods: {
-      "POST"  : RoleLevel.ADMIN,
-      "DELETE": RoleLevel.ADMIN
-    }
-  }
-]
-
-const property_usage_control: RouteControl[] = [
-  {
-    base   : "/api/property_usage",
-    methods: {
-      "DELETE": RoleLevel.MOD,
-      "POST"  : RoleLevel.MOD,
-      "GET"   : RoleLevel.MOD,
-      "PUT"   : RoleLevel.MOD
-    }
-  }
-]
-
-const reviewer_control: RouteControl[] = [
-  {
-    base   : "/api/reviewer",
-    methods: {
-      "DELETE": RoleLevel.MOD,
-      "POST"  : RoleLevel.MOD,
-      "GET"   : RoleLevel.MOD,
-      "PUT"   : RoleLevel.MOD
-    }
-  }
-]
-
 const role_control: RouteControl[] = [
   {
     base   : "/api/role",
@@ -148,16 +81,6 @@ const user_control: RouteControl[] = [
   }
 ]
 
-const user_repository_control: RouteControl[] = [
-  {
-    base   : "/api/user_repository",
-    methods: {
-      "POST": RoleLevel.USER,
-      "GET" : RoleLevel.USER,
-      "PUT" : RoleLevel.MOD
-    }
-  }
-]
 
 const orquestator_control: RouteControl[] = [
   {
@@ -183,15 +106,8 @@ const orquestator_control: RouteControl[] = [
 
 const access_control: RouteControl[] = [
   ...auth_control,
-  ...factibility_control,
-  ...notification_control,
-  ...notification_config_control,
-  ...number_control,
-  ...property_usage_control,
-  ...reviewer_control,
   ...user_control,
   ...role_control,
-  ...user_repository_control,
   ...orquestator_control,
 ]
 
