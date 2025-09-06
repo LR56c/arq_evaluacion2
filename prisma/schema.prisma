@@ -91,22 +91,6 @@ model UserRole {
   @@id([userId, roleId])
 }
 
-// model Customer {
-//   id           String  @id
-//   user         User    @relation(fields: [userId], references: [id])
-//   userId       String  @unique
-//   isSubscribed Boolean @default(false)
-//   phoneNumber  String?
-// }
-//
-// model Seller {
-//   id          String    @id
-//   user        User      @relation(fields: [userId], references: [id])
-//   userId      String    @unique
-//   companyName String?
-//   products    Product[]
-// }
-
 model Product {
   id          String             @id @default(uuid()) @db.Uuid
   name        String
