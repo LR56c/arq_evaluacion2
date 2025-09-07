@@ -1,4 +1,3 @@
-import { H3Event }             from "h3"
 import { RoleLevel }           from "~~/modules/role/domain/role_level"
 import { RoleDTO }             from "~~/modules/role/application/role_dto"
 import {
@@ -150,8 +149,8 @@ export default defineEventHandler( async ( event ) => {
     console.log( "event", event.path )
     const routeLevel = requiredRouteLevel( event.path, event.method )
 
-    const token: string | undefined = getRequestHeader( event, "ut" ) ??
-      await getUser( event ) ?? undefined
+    // const token: string | undefined = getRequestHeader( event, "ut" ) ?? await getUser( event ) ?? undefined
+    const token: string | undefined = getRequestHeader( event, "ut" )
 
     const jwt = await verifyJwt( token ?? "" )
     if ( jwt instanceof BaseException ) {
