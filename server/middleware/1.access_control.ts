@@ -81,27 +81,27 @@ const user_control: RouteControl[] = [
 ]
 
 
-const orquestator_control: RouteControl[] = [
-  {
-    base   : "/api/o/user",
-    methods: {
-      "DELETE": RoleLevel.ADMIN,
-      "PUT"   : RoleLevel.ADMIN
-    }
-  },
-  {
-    base   : "/api/o/user/generate",
-    methods: {
-      "POST": RoleLevel.ADMIN
-    }
-  },
-  {
-    base   : "/api/o/approve",
-    methods: {
-      "PUT": RoleLevel.ADMIN
-    }
-  }
-]
+// const orquestator_control: RouteControl[] = [
+//   {
+//     base   : "/api/o/user",
+//     methods: {
+//       "DELETE": RoleLevel.ADMIN,
+//       "PUT"   : RoleLevel.ADMIN
+//     }
+//   },
+//   {
+//     base   : "/api/o/user/generate",
+//     methods: {
+//       "POST": RoleLevel.ADMIN
+//     }
+//   },
+//   {
+//     base   : "/api/o/approve",
+//     methods: {
+//       "PUT": RoleLevel.ADMIN
+//     }
+//   }
+// ]
 
 const access_control: RouteControl[] = [
   ...auth_control,
