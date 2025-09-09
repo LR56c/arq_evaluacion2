@@ -107,7 +107,7 @@ const access_control: RouteControl[] = [
   ...auth_control,
   ...user_control,
   ...role_control,
-  ...orquestator_control,
+  // ...orquestator_control,
 ]
 
 const requiredRouteLevel = ( path: string, method: string ): RoleLevel => {
