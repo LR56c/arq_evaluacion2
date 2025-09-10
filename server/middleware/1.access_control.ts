@@ -143,38 +143,38 @@ const getUserData = ( json: unknown ): {
 //   return session.user?.ut ?? undefined
 // }
 export default defineEventHandler( async ( event ) => {
-  return appLogger.trace( "middleware", "access control", async () => {
+  // return appLogger.trace( "middleware", "access control", async () => {
     // event.context.highterRole = "public"
+    // console.log( "event", event.path )
+    // const routeLevel = requiredRouteLevel( event.path, event.method )
+    //
+    // // const token: string | undefined = getRequestHeader( event, "ut" ) ?? await getUser( event ) ?? undefined
+    // const token: string | undefined = getRequestHeader( event, "ut" )
+    //
+    // const jwt = await verifyJwt( token ?? "" )
+    // if ( jwt instanceof BaseException ) {
+    //   if ( routeLevel === RoleLevel.PUBLIC ) {
+    //     return
+    //   }
+    //   console.log( "no jwt" )
+    //   throw createError( {
+    //     statusCode   : 401,
+    //     statusMessage: "Bad Request"
+    //   } )
+    // }
+    // const user    = getUserData( jwt.payload.user )
+    // const bAccess = user && user.role >= routeLevel
+    // if ( !bAccess ) {
+    //   console.log( "no access", user, routeLevel )
+    //   throw createError( {
+    //     statusCode   : 401,
+    //     statusMessage: "Bad Request"
+    //   } )
+    // }
 
-    console.log( "event", event.path )
-    const routeLevel = requiredRouteLevel( event.path, event.method )
-
-    // const token: string | undefined = getRequestHeader( event, "ut" ) ?? await getUser( event ) ?? undefined
-    const token: string | undefined = getRequestHeader( event, "ut" )
-
-    const jwt = await verifyJwt( token ?? "" )
-    if ( jwt instanceof BaseException ) {
-      if ( routeLevel === RoleLevel.PUBLIC ) {
-        return
-      }
-      console.log( "no jwt" )
-      throw createError( {
-        statusCode   : 401,
-        statusMessage: "Bad Request"
-      } )
-    }
-    const user    = getUserData( jwt.payload.user )
-    const bAccess = user && user.role >= routeLevel
-    if ( !bAccess ) {
-      console.log( "no access", user, routeLevel )
-      throw createError( {
-        statusCode   : 401,
-        statusMessage: "Bad Request"
-      } )
-    }
     // event.context.auth        = user.user_id ?? undefined
     // event.context.highterRole = user ? (
     //   RoleLevel[user.role]
     // ).toLowerCase() : "public"
-  } )
+  // } )
 } )
