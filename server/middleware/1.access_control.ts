@@ -1,10 +1,7 @@
 import { RoleLevel }           from "~~/modules/role/domain/role_level"
-import { RoleDTO }             from "~~/modules/role/application/role_dto"
 import {
   BaseException
 }                              from "~~/modules/shared/domain/exceptions/base_exception"
-import { getHighterRoleLevel } from "~~/shared/utils/get_highter_role_level"
-import { appLogger }           from "~~/server/instrumentation/app_dependencies"
 import { verifyJwt }           from "~~/server/utils/verify_jwt"
 
 interface RouteControl {
