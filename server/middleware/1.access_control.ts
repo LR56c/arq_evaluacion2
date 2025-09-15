@@ -159,15 +159,16 @@ export default defineEventHandler( async ( event ) => {
         statusMessage: "Bad Request"
       } )
     }
-    const user    = getUserData( jwt.payload.user )
-    const bAccess = user && user.role >= routeLevel
-    if ( !bAccess ) {
-      console.log( "no access", user, routeLevel )
-      throw createError( {
-        statusCode   : 401,
-        statusMessage: "Bad Request"
-      } )
-    }
+    // const user    = getUserData( jwt.payload.user )
+    // const bAccess = user && user.role >= routeLevel
+    // if ( !bAccess ) {
+    //   console.log( "no access", user, routeLevel )
+    //   throw createError( {
+    //     statusCode   : 401,
+    //     statusMessage: "Bad Request"
+    //   } )
+    // }
+
     // event.context.auth        = user.user_id ?? undefined
     // event.context.highterRole = user ? (
     //   RoleLevel[user.role]
