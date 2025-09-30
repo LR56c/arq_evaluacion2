@@ -118,22 +118,22 @@ const requiredRouteLevel = ( path: string, method: string ): RoleLevel => {
   return requiredLevel ?? RoleLevel.PUBLIC
 }
 
-// const getUserData = ( json: unknown ): {
-//                                          role: RoleLevel,
-//                                          user_id: string
-//                                        } | undefined => {
-//   const user     = (
-//     json as { roles: RoleDTO[], user_id: string }
-//   )
-//   const userRole = getHighterRoleLevel( user.roles.map( role => role.name ) )
-//   if ( userRole === undefined ) {
-//     return undefined
-//   }
-//   return {
-//     role   : userRole,
-//     user_id: user.user_id
-//   }
-// }
+const getUserData = ( json: unknown ): {
+                                         role: RoleLevel,
+                                         user_id: string
+                                       } | undefined => {
+  const user     = (
+    json as { roles: RoleDTO[], user_id: string }
+  )
+  const userRole = getHighterRoleLevel( user.roles.map( role => role.name ) )
+  if ( userRole === undefined ) {
+    return undefined
+  }
+  return {
+    role   : userRole,
+    user_id: user.user_id
+  }
+}
 
 // const getUser = async ( event: H3Event ) => {
 //   const session = await getUserSession( event )
