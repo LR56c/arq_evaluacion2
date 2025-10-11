@@ -107,16 +107,16 @@ const access_control: RouteControl[] = [
   // ...orquestator_control,
 ]
 
-// const requiredRouteLevel = ( path: string, method: string ): RoleLevel => {
-//   const route = access_control.find(
-//     ( entry ) => path.startsWith( entry.base ) )
-//   if ( !route ) {
-//     return RoleLevel.PUBLIC
-//   }
-//   const keyMethod     = method as keyof typeof route.methods
-//   const requiredLevel = route.methods[keyMethod]
-//   return requiredLevel ?? RoleLevel.PUBLIC
-// }
+const requiredRouteLevel = ( path: string, method: string ): RoleLevel => {
+  const route = access_control.find(
+    ( entry ) => path.startsWith( entry.base ) )
+  if ( !route ) {
+    return RoleLevel.PUBLIC
+  }
+  const keyMethod     = method as keyof typeof route.methods
+  const requiredLevel = route.methods[keyMethod]
+  return requiredLevel ?? RoleLevel.PUBLIC
+}
 
 // const getUserData = ( json: unknown ): {
 //                                          role: RoleLevel,
