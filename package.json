@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@primevue/nuxt-module": "^4.3.7",
+    "prisma": "^6.17.1",
     "vue-mess-detector-nuxt-devtools": "^0.1.2"
   },
   "overrides": {
